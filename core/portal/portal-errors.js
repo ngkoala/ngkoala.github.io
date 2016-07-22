@@ -56,7 +56,7 @@ exports.MdUnknownPortalTypeError = MdUnknownPortalTypeError;
 var MdNullPortalHostError = (function (_super) {
     __extends(MdNullPortalHostError, _super);
     function MdNullPortalHostError() {
-        _super.call(this, 'Attmepting to attach a portal to a null PortalHost');
+        _super.call(this, 'Attempting to attach a portal to a null PortalHost');
     }
     return MdNullPortalHostError;
 }(error_1.MdError));
@@ -65,7 +65,7 @@ exports.MdNullPortalHostError = MdNullPortalHostError;
 var MdNoPortalAttachedError = (function (_super) {
     __extends(MdNoPortalAttachedError, _super);
     function MdNoPortalAttachedError() {
-        _super.call(this, 'Attmepting to detach a portal that is not attached to a host');
+        _super.call(this, 'Attempting to detach a portal that is not attached to a host');
     }
     return MdNoPortalAttachedError;
 }(error_1.MdError));

@@ -51,12 +51,16 @@ describe('MdSlideToggle', function () {
                 labelElement = fixture.debugElement.query(platform_browser_1.By.css('label')).nativeElement;
             });
         }));
-        it('should update the model correctly', function () {
+        // TODO(kara); update when core/testing adds fix
+        it('should update the model correctly', testing_1.async(function () {
             expect(slideToggleElement.classList).not.toContain('md-checked');
             testComponent.slideModel = true;
             fixture.detectChanges();
-            expect(slideToggleElement.classList).toContain('md-checked');
-        });
+            fixture.whenStable().then(function () {
+                fixture.detectChanges();
+                expect(slideToggleElement.classList).toContain('md-checked');
+            });
+        }));
         it('should apply class based on color attribute', function () {
             testComponent.slideColor = 'primary';
             fixture.detectChanges();
@@ -236,15 +240,19 @@ describe('MdSlideToggle', function () {
             expect(slideToggleControl.touched).toBe(true);
             expect(slideToggleElement.classList).not.toContain('md-checked');
         });
-        it('should not set the control to touched when changing the model', function () {
+        // TODO(kara): update when core/testing adds fix
+        it('should not set the control to touched when changing the model', testing_1.async(function () {
             // The control should start off with being untouched.
             expect(slideToggleControl.touched).toBe(false);
             testComponent.slideModel = true;
             fixture.detectChanges();
-            expect(slideToggleControl.touched).toBe(false);
-            expect(slideToggle.checked).toBe(true);
-            expect(slideToggleElement.classList).toContain('md-checked');
-        });
+            fixture.whenStable().then(function () {
+                fixture.detectChanges();
+                expect(slideToggleControl.touched).toBe(false);
+                expect(slideToggle.checked).toBe(true);
+                expect(slideToggleElement.classList).toContain('md-checked');
+            });
+        }));
         it('should correctly set the slide-toggle to checked on focus', function () {
             expect(slideToggleElement.classList).not.toContain('md-slide-toggle-focused');
             dispatchFocusChangeEvent('focus', inputElement);

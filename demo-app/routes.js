@@ -24,6 +24,7 @@ var radio_demo_1 = require('../radio/radio-demo');
 var card_demo_1 = require('../card/card-demo');
 var menu_demo_1 = require('../menu/menu-demo');
 var dialog_demo_1 = require('../dialog/dialog-demo');
+var tooltip_demo_1 = require('../tooltip/tooltip-demo');
 exports.routes = [
     { path: '', component: demo_app_1.Home },
     { path: 'button', component: button_demo_1.ButtonDemo },
@@ -49,6 +50,7 @@ exports.routes = [
     { path: 'button-toggle', component: button_toggle_demo_1.ButtonToggleDemo },
     { path: 'baseline', component: baseline_demo_1.BaselineDemo },
     { path: 'dialog', component: dialog_demo_1.DialogDemo },
+    { path: 'tooltip', component: tooltip_demo_1.TooltipDemo },
 ];
 exports.DEMO_APP_ROUTE_PROVIDER = router_1.provideRouter(exports.routes);
 //# sourceMappingURL=routes.js.map

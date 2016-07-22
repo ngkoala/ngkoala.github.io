@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var testing_1 = require('@angular/core/testing');
 var testing_2 = require('@angular/compiler/testing');
 var core_1 = require('@angular/core');
-var menu_1 = require('./menu');
+var menu_trigger_1 = require('./menu-trigger');
 describe('MdMenu', function () {
     var builder;
     beforeEach(testing_1.inject([testing_2.TestComponentBuilder], function (tcb) {
@@ -32,7 +32,7 @@ var TestList = (function () {
         core_1.Component({
             selector: 'test-menu',
             template: "",
-            directives: [menu_1.MD_MENU_DIRECTIVES]
+            directives: [menu_trigger_1.MD_MENU_DIRECTIVES]
         }), 
         __metadata('design:paramtypes', [])
     ], TestList);

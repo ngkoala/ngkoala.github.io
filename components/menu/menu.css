@@ -48,6 +48,7 @@
  * This mixin overrides default button styles like the gray background,
  * the border, and the outline.
  */
+/* This mixin ensures an element spans the whole viewport.*/
 /**
  * This mixin will ensure that lines that overflow the container will
  * hide the overflow and truncate neatly with an ellipsis.
@@ -70,7 +71,7 @@
   max-height: calc(100vh + 48px);
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
-  background: #fafafa; }
+  background: white; }
 
 [md-menu-item] {
   background: transparent;
@@ -84,16 +85,33 @@
   white-space: nowrap;
   overflow-x: hidden;
   text-overflow: ellipsis;
-  display: block;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   width: 100%;
   height: 48px;
   padding: 0 16px;
   font-size: 16px;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   text-align: start;
+  text-decoration: none;
   color: rgba(0, 0, 0, 0.87); }
   [md-menu-item][disabled] {
     color: rgba(0, 0, 0, 0.38);
     cursor: default; }
   [md-menu-item]:hover:not([disabled]) {
     background: rgba(0, 0, 0, 0.04); }
+
+.md-menu-click-catcher {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0; }

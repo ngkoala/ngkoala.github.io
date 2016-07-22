@@ -135,7 +135,9 @@ var BasePortalHost = (function () {
         throw new portal_errors_1.MdUnknownPortalTypeError();
     };
     BasePortalHost.prototype.detach = function () {
-        this._attachedPortal.setAttachedHost(null);
+        if (this._attachedPortal) {
+            this._attachedPortal.setAttachedHost(null);
+        }
         this._attachedPortal = null;
         if (this._disposeFn != null) {
             this._disposeFn();

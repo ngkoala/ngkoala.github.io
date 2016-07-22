@@ -32,19 +32,22 @@ describe('MdInput', function () {
             expect(fixture.debugElement.query(platform_browser_1.By.css('input'))).toBeTruthy();
         });
     }));
+    // TODO(kara): update when core/testing adds fix
     it('support ngModel', testing_1.async(function () {
         builder.createAsync(MdInputBaseTestController)
             .then(function (fixture) {
             fixture.detectChanges();
             var instance = fixture.componentInstance;
-            var component = fixture.debugElement.query(platform_browser_1.By.directive(input_1.MdInput)).componentInstance;
             var el = fixture.debugElement.query(platform_browser_1.By.css('input')).nativeElement;
             instance.model = 'hello';
             fixture.detectChanges();
-            expect(el.value).toEqual('hello');
-            component.value = 'world';
-            fixture.detectChanges();
-            expect(el.value).toEqual('world');
+            fixture.whenStable().then(function () {
+                // this workaround is temp, see https://github.com/angular/angular/issues/10148
+                fixture.detectChanges();
+                fixture.whenStable().then(function () {
+                    expect(el.value).toBe('hello');
+                });
+            });
         });
     }));
     it('should have a different ID for outer element and internal input', testing_1.async(function () {
@@ -70,7 +73,9 @@ describe('MdInput', function () {
             expect(inputInstance.characterCount).toEqual(0);
             instance.model = 'hello';
             fixture.detectChanges();
-            expect(inputInstance.characterCount).toEqual(5);
+            fixture.whenStable().then(function () {
+                expect(inputInstance.characterCount).toEqual(5);
+            });
         });
     }));
     it('copies aria attributes to the inner input', testing_1.async(function () {

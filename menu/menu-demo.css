@@ -1,0 +1,7 @@
+.demo-menu {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+  .demo-menu .menu-section {
+    width: 300px;
+    margin: 20px; }

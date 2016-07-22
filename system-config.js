@@ -19,7 +19,8 @@ var components = [
     'slide-toggle',
     'button-toggle',
     'tabs',
-    'toolbar'
+    'toolbar',
+    'tooltip',
 ];
 /** Map relative paths to URLs. */
 var map = {

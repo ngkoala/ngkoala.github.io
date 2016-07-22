@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var common_1 = require('@angular/common');
+var forms_1 = require('@angular/forms');
 var button_toggle_1 = require('@angular2-material/button-toggle/button-toggle');
 var unique_selection_dispatcher_1 = require('@angular2-material/core/coordination/unique-selection-dispatcher');
 var icon_1 = require('@angular2-material/icon/icon');
@@ -29,7 +30,7 @@ var ButtonToggleDemo = (function () {
             selector: 'button-toggle-demo',
             templateUrl: 'button-toggle-demo.html',
             providers: [unique_selection_dispatcher_1.MdUniqueSelectionDispatcher],
-            directives: [button_toggle_1.MD_BUTTON_TOGGLE_DIRECTIVES, common_1.FORM_DIRECTIVES, icon_1.MdIcon, common_1.NgFor]
+            directives: [button_toggle_1.MD_BUTTON_TOGGLE_DIRECTIVES, forms_1.FORM_DIRECTIVES, icon_1.MdIcon, common_1.NgFor]
         }), 
         __metadata('design:paramtypes', [])
     ], ButtonToggleDemo);

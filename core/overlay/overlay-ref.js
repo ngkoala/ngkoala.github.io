@@ -15,7 +15,7 @@ var OverlayRef = (function () {
         // Don't chain the .then() call in the return because we want the result of portalHost.attach
         // to be returned from this method.
         attachPromise.then(function () {
-            _this._updatePosition();
+            _this.updatePosition();
         });
         return attachPromise;
     };
@@ -33,7 +33,7 @@ var OverlayRef = (function () {
         return this._state;
     };
     /** Updates the position of the overlay based on the position strategy. */
-    OverlayRef.prototype._updatePosition = function () {
+    OverlayRef.prototype.updatePosition = function () {
         if (this._state.positionStrategy) {
             this._state.positionStrategy.apply(this._pane);
         }

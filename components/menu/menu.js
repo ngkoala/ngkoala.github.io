@@ -1,3 +1,6 @@
+// TODO(kara): keyboard events for menu navigation
+// TODO(kara): prevent-close functionality
+// TODO(kara): set position of menu
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -11,7 +14,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var MdMenu = (function () {
     function MdMenu() {
+        this._showClickCatcher = false;
+        this.close = new core_1.EventEmitter;
     }
+    /**
+     * This function toggles the display of the menu's click catcher element.
+     * This element covers the viewport when the menu is open to detect clicks outside the menu.
+     * TODO: internal
+     */
+    MdMenu.prototype._setClickCatcher = function (bool) {
+        this._showClickCatcher = bool;
+    };
+    MdMenu.prototype._emitCloseEvent = function () {
+        this.close.emit(null);
+    };
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], MdMenu.prototype, "close", void 0);
+    __decorate([
+        core_1.ViewChild(core_1.TemplateRef), 
+        __metadata('design:type', core_1.TemplateRef)
+    ], MdMenu.prototype, "templateRef", void 0);
     MdMenu = __decorate([
         core_1.Component({
             moduleId: module.id,
@@ -27,18 +51,4 @@ var MdMenu = (function () {
     return MdMenu;
 }());
 exports.MdMenu = MdMenu;
-var MdMenuItem = (function () {
-    function MdMenuItem() {
-    }
-    MdMenuItem = __decorate([
-        core_1.Directive({
-            selector: '[md-menu-item]',
-            host: { 'role': 'menuitem' }
-        }), 
-        __metadata('design:paramtypes', [])
-    ], MdMenuItem);
-    return MdMenuItem;
-}());
-exports.MdMenuItem = MdMenuItem;
-exports.MD_MENU_DIRECTIVES = [MdMenu, MdMenuItem];
 //# sourceMappingURL=menu.js.map

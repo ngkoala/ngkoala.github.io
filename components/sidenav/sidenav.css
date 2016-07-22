@@ -63,12 +63,12 @@
  * This mixin should be applied to elements whose elevation values will change depending on their
  * context (e.g. when active or disabled).
  */
+/* This mixin ensures an element spans the whole viewport.*/
 /**
  * Mixin to help with defining LTR/RTL 'transform: translate3d()' values.
  * @param $open The translation value when the sidenav is opened.
  * @param $close The translation value when the sidenav is closed.
  */
-/* This mixin ensures a sidenav element spans the whole viewport.*/
 :host {
   position: relative;
   -webkit-transform: translate3d(0, 0, 0);

@@ -16,5 +16,5 @@ export declare class OverlayRef implements PortalHost {
     /** Gets the current state config of the overlay. */
     getState(): OverlayState;
     /** Updates the position of the overlay based on the position strategy. */
-    private _updatePosition();
+    updatePosition(): void;
 }
