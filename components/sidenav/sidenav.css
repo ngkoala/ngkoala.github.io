@@ -78,7 +78,7 @@
   display: block;
   overflow: hidden; }
   :host[fullscreen] {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -86,7 +86,7 @@
     :host[fullscreen].md-sidenav-opened {
       overflow: hidden; }
   :host > .md-sidenav-backdrop {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;

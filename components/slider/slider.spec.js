@@ -40,7 +40,6 @@ describe('MdSlider', function () {
         var sliderDimensions;
         var thumbElement;
         var thumbDimensions;
-        var thumbWidth;
         beforeEach(testing_1.async(function () {
             builder.createAsync(StandardSlider).then(function (f) {
                 fixture = f;
@@ -54,8 +53,6 @@ describe('MdSlider', function () {
                 sliderDimensions = sliderTrackElement.getBoundingClientRect();
                 thumbElement = sliderNativeElement.querySelector('.md-slider-thumb-position');
                 thumbDimensions = thumbElement.getBoundingClientRect();
-                thumbWidth =
-                    sliderNativeElement.querySelector('.md-slider-thumb').getBoundingClientRect().width;
             });
         }));
         it('should set the default values', function () {
@@ -67,15 +64,13 @@ describe('MdSlider', function () {
             expect(sliderInstance.value).toBe(0);
             dispatchClickEvent(sliderTrackElement, 0.19);
             // The expected value is 19 from: percentage * difference of max and min.
-            var difference = Math.abs(sliderInstance.value - 19);
-            expect(difference).toBeLessThan(1);
+            expect(sliderInstance.value).toBe(19);
         });
         it('should update the value on a drag', function () {
             expect(sliderInstance.value).toBe(0);
             dispatchDragEvent(sliderTrackElement, sliderNativeElement, 0, 0.89, gestureConfig);
             // The expected value is 89 from: percentage * difference of max and min.
-            var difference = Math.abs(sliderInstance.value - 89);
-            expect(difference).toBeLessThan(1);
+            expect(sliderInstance.value).toBe(89);
         });
         it('should set the value as min when dragging before the track', function () {
             expect(sliderInstance.value).toBe(0);
@@ -91,34 +86,41 @@ describe('MdSlider', function () {
             expect(trackFillDimensions.width).toBe(0);
             dispatchClickEvent(sliderTrackElement, 0.39);
             trackFillDimensions = trackFillElement.getBoundingClientRect();
-            // The fill should be close to the slider's width * the percentage from the click.
-            var difference = Math.abs(trackFillDimensions.width - (sliderDimensions.width * 0.39));
-            expect(difference).toBeLessThan(1);
+            thumbDimensions = thumbElement.getBoundingClientRect();
+            // The thumb and track fill positions are relative to the viewport, so to get the thumb's
+            // offset relative to the track, subtract the offset on the track fill.
+            var thumbPosition = thumbDimensions.left - trackFillDimensions.left;
+            // The track fill width should be equal to the thumb's position.
+            expect(Math.round(trackFillDimensions.width)).toBe(Math.round(thumbPosition));
         });
         it('should update the thumb position on click', function () {
-            expect(thumbDimensions.left).toBe(sliderDimensions.left - (thumbWidth / 2));
-            dispatchClickEvent(sliderTrackElement, 0.16);
+            expect(thumbDimensions.left).toBe(sliderDimensions.left);
+            // 50% is used here because the click event that is dispatched truncates the position and so
+            // a value had to be used that would not be truncated.
+            dispatchClickEvent(sliderTrackElement, 0.5);
             thumbDimensions = thumbElement.getBoundingClientRect();
-            // The thumb's offset is expected to be equal to the slider's offset + 0.16 * the slider's
-            // width - half the thumb width (to center the thumb).
-            var offset = sliderDimensions.left + (sliderDimensions.width * 0.16) - (thumbWidth / 2);
-            var difference = Math.abs(thumbDimensions.left - offset);
-            expect(difference).toBeLessThan(1);
+            // The thumb position should be at 50% of the slider's width + the offset of the slider.
+            // Both the thumb and the slider are affected by this offset.
+            expect(thumbDimensions.left).toBe(sliderDimensions.width * 0.5 + sliderDimensions.left);
         });
         it('should update the track fill on drag', function () {
             expect(trackFillDimensions.width).toBe(0);
             dispatchDragEvent(sliderTrackElement, sliderNativeElement, 0, 0.86, gestureConfig);
             trackFillDimensions = trackFillElement.getBoundingClientRect();
-            var difference = Math.abs(trackFillDimensions.width - (sliderDimensions.width * 0.86));
-            expect(difference).toBeLessThan(1);
+            thumbDimensions = thumbElement.getBoundingClientRect();
+            // The thumb and track fill positions are relative to the viewport, so to get the thumb's
+            // offset relative to the track, subtract the offset on the track fill.
+            var thumbPosition = thumbDimensions.left - trackFillDimensions.left;
+            // The track fill width should be equal to the thumb's position.
+            expect(Math.round(trackFillDimensions.width)).toBe(Math.round(thumbPosition));
         });
         it('should update the thumb position on drag', function () {
-            expect(thumbDimensions.left).toBe(sliderDimensions.left - (thumbWidth / 2));
-            dispatchDragEvent(sliderTrackElement, sliderNativeElement, 0, 0.27, gestureConfig);
+            expect(thumbDimensions.left).toBe(sliderDimensions.left);
+            // The drag event also truncates the position passed in, so 50% is used here as well to
+            // ensure the ability to calculate the expected position.
+            dispatchDragEvent(sliderTrackElement, sliderNativeElement, 0, 0.5, gestureConfig);
             thumbDimensions = thumbElement.getBoundingClientRect();
-            var offset = sliderDimensions.left + (sliderDimensions.width * 0.27) - (thumbWidth / 2);
-            var difference = Math.abs(thumbDimensions.left - offset);
-            expect(difference).toBeLessThan(1);
+            expect(thumbDimensions.left).toBe(sliderDimensions.width * 0.5 + sliderDimensions.left);
         });
         it('should add the md-slider-active class on click', function () {
             var containerElement = sliderNativeElement.querySelector('.md-slider-container');
@@ -196,6 +198,9 @@ describe('MdSlider', function () {
         var sliderNativeElement;
         var sliderInstance;
         var sliderTrackElement;
+        var sliderDimensions;
+        var trackFillElement;
+        var thumbElement;
         beforeEach(testing_1.async(function () {
             builder.createAsync(SliderWithMinAndMax).then(function (f) {
                 fixture = f;
@@ -204,28 +209,51 @@ describe('MdSlider', function () {
                 sliderNativeElement = sliderDebugElement.nativeElement;
                 sliderInstance = sliderDebugElement.injector.get(slider_1.MdSlider);
                 sliderTrackElement = sliderNativeElement.querySelector('.md-slider-track');
+                sliderDimensions = sliderTrackElement.getBoundingClientRect();
+                trackFillElement = sliderNativeElement.querySelector('.md-slider-track-fill');
+                thumbElement = sliderNativeElement.querySelector('.md-slider-thumb-position');
             });
         }));
         it('should set the default values from the attributes', function () {
-            expect(sliderInstance.value).toBe(5);
-            expect(sliderInstance.min).toBe(5);
-            expect(sliderInstance.max).toBe(15);
+            expect(sliderInstance.value).toBe(4);
+            expect(sliderInstance.min).toBe(4);
+            expect(sliderInstance.max).toBe(6);
         });
         it('should set the correct value on click', function () {
             dispatchClickEvent(sliderTrackElement, 0.09);
             // Computed by multiplying the difference between the min and the max by the percentage from
             // the click and adding that to the minimum.
-            var value = 5 + (0.09 * (15 - 5));
-            var difference = Math.abs(sliderInstance.value - value);
-            expect(difference).toBeLessThan(1);
+            var value = Math.round(4 + (0.09 * (6 - 4)));
+            expect(sliderInstance.value).toBe(value);
         });
         it('should set the correct value on drag', function () {
             dispatchDragEvent(sliderTrackElement, sliderNativeElement, 0, 0.62, gestureConfig);
             // Computed by multiplying the difference between the min and the max by the percentage from
             // the click and adding that to the minimum.
-            var value = 5 + (0.62 * (15 - 5));
-            var difference = Math.abs(sliderInstance.value - value);
-            expect(difference).toBeLessThan(1);
+            var value = Math.round(4 + (0.62 * (6 - 4)));
+            expect(sliderInstance.value).toBe(value);
+        });
+        it('should snap the thumb and fill to the nearest value on click', function () {
+            dispatchClickEvent(sliderTrackElement, 0.68);
+            fixture.detectChanges();
+            var trackFillDimensions = trackFillElement.getBoundingClientRect();
+            var thumbDimensions = thumbElement.getBoundingClientRect();
+            var thumbPosition = thumbDimensions.left - trackFillDimensions.left;
+            // The closest snap is halfway on the slider.
+            expect(thumbDimensions.left).toBe(sliderDimensions.width * 0.5 + sliderDimensions.left);
+            expect(Math.round(trackFillDimensions.width)).toBe(Math.round(thumbPosition));
+        });
+        it('should snap the thumb and fill to the nearest value on drag', function () {
+            dispatchDragEvent(sliderTrackElement, sliderNativeElement, 0, 0.74, gestureConfig);
+            fixture.detectChanges();
+            dispatchDragEndEvent(sliderNativeElement, 0.74, gestureConfig);
+            fixture.detectChanges();
+            var trackFillDimensions = trackFillElement.getBoundingClientRect();
+            var thumbDimensions = thumbElement.getBoundingClientRect();
+            var thumbPosition = thumbDimensions.left - trackFillDimensions.left;
+            // The closest snap is at the halfway point on the slider.
+            expect(thumbDimensions.left).toBe(sliderDimensions.left + sliderDimensions.width * 0.5);
+            expect(Math.round(trackFillDimensions.width)).toBe(Math.round(thumbPosition));
         });
     });
     describe('slider with set value', function () {
@@ -251,13 +279,67 @@ describe('MdSlider', function () {
             dispatchClickEvent(sliderTrackElement, 0.92);
             // On a slider with default max and min the value should be approximately equal to the
             // percentage clicked. This should be the case regardless of what the original set value was.
-            var value = 92;
-            var difference = Math.abs(sliderInstance.value - value);
-            expect(difference).toBeLessThan(1);
+            expect(sliderInstance.value).toBe(92);
         });
         it('should set the correct value on drag', function () {
             dispatchDragEvent(sliderTrackElement, sliderNativeElement, 0, 0.32, gestureConfig);
             expect(sliderInstance.value).toBe(32);
+        });
+    });
+    describe('slider with set step', function () {
+        var fixture;
+        var sliderDebugElement;
+        var sliderNativeElement;
+        var sliderInstance;
+        var sliderTrackElement;
+        var sliderDimensions;
+        var trackFillElement;
+        var thumbElement;
+        beforeEach(testing_1.async(function () {
+            builder.createAsync(SliderWithStep).then(function (f) {
+                fixture = f;
+                fixture.detectChanges();
+                sliderDebugElement = fixture.debugElement.query(platform_browser_1.By.directive(slider_1.MdSlider));
+                sliderNativeElement = sliderDebugElement.nativeElement;
+                sliderInstance = sliderDebugElement.injector.get(slider_1.MdSlider);
+                sliderTrackElement = sliderNativeElement.querySelector('.md-slider-track');
+                sliderDimensions = sliderTrackElement.getBoundingClientRect();
+                trackFillElement = sliderNativeElement.querySelector('.md-slider-track-fill');
+                thumbElement = sliderNativeElement.querySelector('.md-slider-thumb-position');
+            });
+        }));
+        it('should set the correct step value on click', function () {
+            expect(sliderInstance.value).toBe(0);
+            dispatchClickEvent(sliderTrackElement, 0.13);
+            fixture.detectChanges();
+            expect(sliderInstance.value).toBe(25);
+        });
+        it('should snap the thumb and fill to a step on click', function () {
+            dispatchClickEvent(sliderNativeElement, 0.66);
+            fixture.detectChanges();
+            var trackFillDimensions = trackFillElement.getBoundingClientRect();
+            var thumbDimensions = thumbElement.getBoundingClientRect();
+            var thumbPosition = thumbDimensions.left - trackFillDimensions.left;
+            // The closest step is at 75% of the slider.
+            expect(thumbDimensions.left).toBe(sliderDimensions.width * 0.75 + sliderDimensions.left);
+            expect(Math.round(trackFillDimensions.width)).toBe(Math.round(thumbPosition));
+        });
+        it('should set the correct step value on drag', function () {
+            dispatchDragEvent(sliderTrackElement, sliderNativeElement, 0, 0.07, gestureConfig);
+            fixture.detectChanges();
+            expect(sliderInstance.value).toBe(0);
+        });
+        it('should snap the thumb and fill to a step on drag', function () {
+            dispatchDragEvent(sliderTrackElement, sliderNativeElement, 0, 0.88, gestureConfig);
+            fixture.detectChanges();
+            dispatchDragEndEvent(sliderNativeElement, 0.88, gestureConfig);
+            fixture.detectChanges();
+            var trackFillDimensions = trackFillElement.getBoundingClientRect();
+            var thumbDimensions = thumbElement.getBoundingClientRect();
+            var thumbPosition = thumbDimensions.left - trackFillDimensions.left;
+            // The closest snap is at the end of the slider.
+            expect(thumbDimensions.left).toBe(sliderDimensions.width + sliderDimensions.left);
+            expect(Math.round(trackFillDimensions.width)).toBe(Math.round(thumbPosition));
         });
     });
 });
@@ -294,7 +376,9 @@ var SliderWithMinAndMax = (function () {
     SliderWithMinAndMax = __decorate([
         core_1.Component({
             directives: [slider_1.MD_SLIDER_DIRECTIVES],
-            template: "<md-slider min=\"5\" max=\"15\"></md-slider>"
+            template: "<md-slider min=\"4\" max=\"6\"></md-slider>",
+            styles: ["\n    .md-slider-track-fill, .md-slider-thumb-position {\n        transition: none !important;\n    }\n  "],
+            encapsulation: core_1.ViewEncapsulation.None
         }), 
         __metadata('design:paramtypes', [])
     ], SliderWithMinAndMax);
@@ -312,8 +396,23 @@ var SliderWithValue = (function () {
     ], SliderWithValue);
     return SliderWithValue;
 }());
+var SliderWithStep = (function () {
+    function SliderWithStep() {
+    }
+    SliderWithStep = __decorate([
+        core_1.Component({
+            directives: [slider_1.MD_SLIDER_DIRECTIVES],
+            template: "<md-slider step=\"25\"></md-slider>",
+            styles: ["\n    .md-slider-track-fill, .md-slider-thumb-position {\n        transition: none !important;\n    }\n  "],
+            encapsulation: core_1.ViewEncapsulation.None
+        }), 
+        __metadata('design:paramtypes', [])
+    ], SliderWithStep);
+    return SliderWithStep;
+}());
 /**
  * Dispatches a click event from an element.
+ * Note: The mouse event truncates the position for the click.
  * @param element The element from which the event will be dispatched.
  * @param percentage The percentage of the slider where the click should occur. Used to find the
  * physical location of the click.

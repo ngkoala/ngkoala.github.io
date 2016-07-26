@@ -1,6 +1,5 @@
 import { ElementRef, EventEmitter, ViewContainerRef, AfterViewInit, OnDestroy } from '@angular/core';
-import { MdMenu } from './menu';
-import { MdMenuItem } from './menu-item';
+import { MdMenu } from './menu-directive';
 import { Overlay } from '@angular2-material/core/core';
 /**
  * This directive is intended to be used in conjunction with an md-menu tag.  It is
@@ -12,13 +11,14 @@ export declare class MdMenuTrigger implements AfterViewInit, OnDestroy {
     private _viewContainerRef;
     private _portal;
     private _overlayRef;
-    menuOpen: boolean;
+    private _menuOpen;
     menu: MdMenu;
     onMenuOpen: EventEmitter<{}>;
     onMenuClose: EventEmitter<{}>;
     constructor(_overlay: Overlay, _element: ElementRef, _viewContainerRef: ViewContainerRef);
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
+    menuOpen: boolean;
     toggleMenu(): Promise<void>;
     openMenu(): Promise<void>;
     closeMenu(): Promise<void>;
@@ -46,4 +46,3 @@ export declare class MdMenuTrigger implements AfterViewInit, OnDestroy {
      */
     private _getPosition();
 }
-export declare const MD_MENU_DIRECTIVES: (typeof MdMenuItem | typeof MdMenuTrigger)[];

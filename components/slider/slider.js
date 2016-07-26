@@ -24,6 +24,8 @@ var MdSlider = (function () {
         this._max = 100;
         /** The percentage of the slider that coincides with the value. */
         this._percent = 0;
+        /** The values at which the thumb will snap. */
+        this.step = 1;
         /**
          * Whether or not the thumb is currently being dragged.
          * Used to determine if there should be a transition for the thumb and fill track.
@@ -74,7 +76,6 @@ var MdSlider = (function () {
         set: function (v) {
             this._value = Number(v);
             this._isInitialized = true;
-            this.updatePercentFromValue();
         },
         enumerable: true,
         configurable: true
@@ -86,7 +87,7 @@ var MdSlider = (function () {
      */
     MdSlider.prototype.ngAfterContentInit = function () {
         this._sliderDimensions = this._renderer.getSliderDimensions();
-        this._renderer.updateThumbAndFillPosition(this._percent, this._sliderDimensions.width);
+        this.snapToValue();
     };
     /** TODO: internal */
     MdSlider.prototype.onClick = function (event) {
@@ -97,6 +98,7 @@ var MdSlider = (function () {
         this.isDragging = false;
         this._renderer.addFocus();
         this.updateValueFromPosition(event.clientX);
+        this.snapToValue();
     };
     /** TODO: internal */
     MdSlider.prototype.onDrag = function (event) {
@@ -121,6 +123,7 @@ var MdSlider = (function () {
     /** TODO: internal */
     MdSlider.prototype.onDragEnd = function () {
         this.isDragging = false;
+        this.snapToValue();
     };
     /** TODO: internal */
     MdSlider.prototype.onResize = function () {
@@ -136,18 +139,33 @@ var MdSlider = (function () {
     /**
      * When the value changes without a physical position, the percentage needs to be recalculated
      * independent of the physical location.
+     * This is also used to move the thumb to a snapped value once dragging is done.
      */
     MdSlider.prototype.updatePercentFromValue = function () {
         this._percent = (this.value - this.min) / (this.max - this.min);
     };
     /**
-     * Calculate the new value from the new physical location.
+     * Calculate the new value from the new physical location. The value will always be snapped.
      */
     MdSlider.prototype.updateValueFromPosition = function (pos) {
         var offset = this._sliderDimensions.left;
         var size = this._sliderDimensions.width;
+        // The exact value is calculated from the event and used to find the closest snap value.
         this._percent = this.clamp((pos - offset) / size);
-        this.value = this.min + (this._percent * (this.max - this.min));
+        var exactValue = this.min + (this._percent * (this.max - this.min));
+        // This calculation finds the closest step by finding the closest whole number divisible by the
+        // step relative to the min.
+        var closestValue = Math.round((exactValue - this.min) / this.step) * this.step + this.min;
+        // The value needs to snap to the min and max.
+        this.value = this.clamp(closestValue, this.min, this.max);
+        this._renderer.updateThumbAndFillPosition(this._percent, this._sliderDimensions.width);
+    };
+    /**
+     * Snaps the thumb to the current value.
+     * Called after a click or drag event is over.
+     */
+    MdSlider.prototype.snapToValue = function () {
+        this.updatePercentFromValue();
         this._renderer.updateThumbAndFillPosition(this._percent, this._sliderDimensions.width);
     };
     /**
@@ -165,6 +183,10 @@ var MdSlider = (function () {
         core_1.HostBinding('attr.aria-disabled'), 
         __metadata('design:type', Boolean)
     ], MdSlider.prototype, "disabled", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Number)
+    ], MdSlider.prototype, "step", void 0);
     __decorate([
         core_1.Input(),
         core_1.HostBinding('attr.aria-valuemin'), 
@@ -222,18 +244,12 @@ var SliderRenderer = (function () {
      * Update the physical position of the thumb and fill track on the slider.
      */
     SliderRenderer.prototype.updateThumbAndFillPosition = function (percent, width) {
-        // The actual thumb element. Needed to get the exact width of the thumb for calculations.
-        var thumbElement = this._sliderElement.querySelector('.md-slider-thumb');
         // A container element that is used to avoid overwriting the transform on the thumb itself.
         var thumbPositionElement = this._sliderElement.querySelector('.md-slider-thumb-position');
         var fillTrackElement = this._sliderElement.querySelector('.md-slider-track-fill');
-        var thumbWidth = thumbElement.getBoundingClientRect().width;
         var position = percent * width;
-        // The thumb needs to be shifted to the left by half of the width of itself so that it centers
-        // on the value.
-        var thumbPosition = position - (thumbWidth / 2);
         fillTrackElement.style.width = position + "px";
-        apply_transform_1.applyCssTransform(thumbPositionElement, "translateX(" + thumbPosition + "px)");
+        apply_transform_1.applyCssTransform(thumbPositionElement, "translateX(" + position + "px)");
     };
     /**
      * Focuses the native element.

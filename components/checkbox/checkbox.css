@@ -279,10 +279,11 @@
   box-sizing: border-box;
   pointer-events: none; }
 
-md-checkbox, md-checkbox label {
+md-checkbox {
   cursor: pointer; }
 
 .md-checkbox-layout {
+  cursor: inherit;
   -webkit-box-align: baseline;
       -ms-flex-align: baseline;
           align-items: baseline;

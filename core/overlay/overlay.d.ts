@@ -1,10 +1,9 @@
-import { ComponentResolver, OpaqueToken } from '@angular/core';
+import { ComponentResolver } from '@angular/core';
 import { OverlayState } from './overlay-state';
 import { OverlayRef } from './overlay-ref';
 import { OverlayPositionBuilder } from './position/overlay-position-builder';
 import { ViewportRuler } from './position/viewport-ruler';
-/** Token used to inject the DOM element that serves as the overlay container. */
-export declare const OVERLAY_CONTAINER_TOKEN: OpaqueToken;
+import { OverlayContainer } from './overlay-container';
 /**
  * Service to create Overlays. Overlays are dynamically added pieces of floating UI, meant to be
  * used as a low-level building building block for other components. Dialogs, tooltips, menus,
@@ -14,10 +13,10 @@ export declare const OVERLAY_CONTAINER_TOKEN: OpaqueToken;
  * An overlay *is* a PortalHost, so any kind of Portal can be loaded into one.
  */
 export declare class Overlay {
+    private _overlayContainer;
     private _componentResolver;
     private _positionBuilder;
-    private _overlayContainerElement;
-    constructor(overlayContainerElement: any, _componentResolver: ComponentResolver, _positionBuilder: OverlayPositionBuilder);
+    constructor(_overlayContainer: OverlayContainer, _componentResolver: ComponentResolver, _positionBuilder: OverlayPositionBuilder);
     /**
      * Creates an overlay.
      * @param state State to apply to the overlay.

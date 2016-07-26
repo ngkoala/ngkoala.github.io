@@ -11,6 +11,8 @@ export declare class MdSlider implements AfterContentInit {
     private _max;
     /** The percentage of the slider that coincides with the value. */
     private _percent;
+    /** The values at which the thumb will snap. */
+    step: number;
     /**
      * Whether or not the thumb is currently being dragged.
      * Used to determine if there should be a transition for the thumb and fill track.
@@ -52,12 +54,18 @@ export declare class MdSlider implements AfterContentInit {
     /**
      * When the value changes without a physical position, the percentage needs to be recalculated
      * independent of the physical location.
+     * This is also used to move the thumb to a snapped value once dragging is done.
      */
     updatePercentFromValue(): void;
     /**
-     * Calculate the new value from the new physical location.
+     * Calculate the new value from the new physical location. The value will always be snapped.
      */
     updateValueFromPosition(pos: number): void;
+    /**
+     * Snaps the thumb to the current value.
+     * Called after a click or drag event is over.
+     */
+    snapToValue(): void;
     /**
      * Return a number between two numbers.
      */

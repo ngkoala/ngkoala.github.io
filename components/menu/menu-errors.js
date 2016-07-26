@@ -16,4 +16,28 @@ var MdMenuMissingError = (function (_super) {
     return MdMenuMissingError;
 }(error_1.MdError));
 exports.MdMenuMissingError = MdMenuMissingError;
+/**
+ * Exception thrown when menu's x-position value isn't valid.
+ * In other words, it doesn't match 'before' or 'after'.
+ */
+var MdMenuInvalidPositionX = (function (_super) {
+    __extends(MdMenuInvalidPositionX, _super);
+    function MdMenuInvalidPositionX() {
+        _super.call(this, "x-position value must be either 'before' or after'.\n      Example: <md-menu x-position=\"before\" #menu=\"mdMenu\"></md-menu>\n    ");
+    }
+    return MdMenuInvalidPositionX;
+}(error_1.MdError));
+exports.MdMenuInvalidPositionX = MdMenuInvalidPositionX;
+/**
+ * Exception thrown when menu's y-position value isn't valid.
+ * In other words, it doesn't match 'above' or 'below'.
+ */
+var MdMenuInvalidPositionY = (function (_super) {
+    __extends(MdMenuInvalidPositionY, _super);
+    function MdMenuInvalidPositionY() {
+        _super.call(this, "y-position value must be either 'above' or below'.\n      Example: <md-menu y-position=\"above\" #menu=\"mdMenu\"></md-menu>\n    ");
+    }
+    return MdMenuInvalidPositionY;
+}(error_1.MdError));
+exports.MdMenuInvalidPositionY = MdMenuInvalidPositionY;
 //# sourceMappingURL=menu-errors.js.map

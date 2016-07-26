@@ -16,6 +16,7 @@ var GesturesDemo = (function () {
         this.pressCount = 0;
         this.longpressCount = 0;
         this.swipeCount = 0;
+        this.slideCount = 0;
     }
     GesturesDemo = __decorate([
         core_1.Component({

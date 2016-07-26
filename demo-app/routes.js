@@ -23,6 +23,7 @@ var sidenav_demo_1 = require('../sidenav/sidenav-demo');
 var radio_demo_1 = require('../radio/radio-demo');
 var card_demo_1 = require('../card/card-demo');
 var menu_demo_1 = require('../menu/menu-demo');
+var ripple_demo_1 = require('../ripple/ripple-demo');
 var dialog_demo_1 = require('../dialog/dialog-demo');
 var tooltip_demo_1 = require('../tooltip/tooltip-demo');
 exports.routes = [
@@ -49,6 +50,7 @@ exports.routes = [
     { path: 'tabs', component: tab_group_demo_1.TabsDemo },
     { path: 'button-toggle', component: button_toggle_demo_1.ButtonToggleDemo },
     { path: 'baseline', component: baseline_demo_1.BaselineDemo },
+    { path: 'ripple', component: ripple_demo_1.RippleDemo },
     { path: 'dialog', component: dialog_demo_1.DialogDemo },
     { path: 'tooltip', component: tooltip_demo_1.TooltipDemo },
 ];

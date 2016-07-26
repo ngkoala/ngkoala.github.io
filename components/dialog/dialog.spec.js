@@ -13,6 +13,7 @@ var testing_2 = require('@angular/compiler/testing');
 var core_1 = require('@angular/core');
 var dialog_1 = require('./dialog');
 var overlay_1 = require('@angular2-material/core/overlay/overlay');
+var overlay_container_1 = require('@angular2-material/core/overlay/overlay-container');
 var dialog_config_1 = require('./dialog-config');
 var dialog_ref_1 = require('./dialog-ref');
 describe('MdDialog', function () {
@@ -25,10 +26,14 @@ describe('MdDialog', function () {
         testing_1.addProviders([
             overlay_1.OVERLAY_PROVIDERS,
             dialog_1.MdDialog,
-            { provide: overlay_1.OVERLAY_CONTAINER_TOKEN, useFactory: function () {
-                    overlayContainerElement = document.createElement('div');
-                    return overlayContainerElement;
-                } }
+            { provide: overlay_container_1.OverlayContainer, useFactory: function () {
+                    return {
+                        getContainerElement: function () {
+                            overlayContainerElement = document.createElement('div');
+                            return overlayContainerElement;
+                        }
+                    };
+                } },
         ]);
     });
     var deps = [testing_2.TestComponentBuilder, dialog_1.MdDialog];

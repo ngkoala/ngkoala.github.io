@@ -14,17 +14,20 @@ var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
 var tooltip_1 = require('@angular2-material/tooltip/tooltip');
 var overlay_1 = require('@angular2-material/core/overlay/overlay');
+var overlay_container_1 = require('@angular2-material/core/overlay/overlay-container');
 testing_1.describe('MdTooltip', function () {
     var builder;
     var overlayContainerElement;
     testing_1.beforeEachProviders(function () { return [
         overlay_1.OVERLAY_PROVIDERS,
-        core_1.provide(overlay_1.OVERLAY_CONTAINER_TOKEN, {
-            useFactory: function () {
-                overlayContainerElement = document.createElement('div');
-                return overlayContainerElement;
-            }
-        })
+        { provide: overlay_container_1.OverlayContainer, useFactory: function () {
+                return {
+                    getContainerElement: function () {
+                        overlayContainerElement = document.createElement('div');
+                        return overlayContainerElement;
+                    }
+                };
+            } },
     ]; });
     testing_1.beforeEach(testing_1.inject([testing_2.TestComponentBuilder], function (tcb) {
         builder = tcb;

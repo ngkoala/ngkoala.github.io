@@ -19,7 +19,7 @@ export declare class MdProgressCircle implements OnDestroy {
     /** TODO: internal */
     /** TODO: internal */
     interdeterminateInterval: number;
-    /** The current path value, representing the progres circle. */
+    /** The current path value, representing the progress circle. */
     private _currentPath;
     /** TODO: internal */
     currentPath: string;

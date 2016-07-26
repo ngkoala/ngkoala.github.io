@@ -1,7 +1,14 @@
 .demo-menu {
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex; }
+  display: flex;
+  -ms-flex-flow: row wrap;
+      flex-flow: row wrap; }
   .demo-menu .menu-section {
     width: 300px;
     margin: 20px; }
+  .demo-menu .end-icon {
+    -webkit-box-align: end;
+        -ms-flex-align: end;
+                -ms-grid-row-align: flex-end;
+            align-items: flex-end; }

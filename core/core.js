@@ -17,8 +17,9 @@ exports.DomPortalHost = dom_portal_host_1.DomPortalHost;
 // Overlay
 var overlay_1 = require('./overlay/overlay');
 exports.Overlay = overlay_1.Overlay;
-exports.OVERLAY_CONTAINER_TOKEN = overlay_1.OVERLAY_CONTAINER_TOKEN;
 exports.OVERLAY_PROVIDERS = overlay_1.OVERLAY_PROVIDERS;
+var overlay_container_1 = require('./overlay/overlay-container');
+exports.OverlayContainer = overlay_container_1.OverlayContainer;
 var overlay_ref_1 = require('./overlay/overlay-ref');
 exports.OverlayRef = overlay_ref_1.OverlayRef;
 var overlay_state_1 = require('./overlay/overlay-state');
@@ -30,6 +31,10 @@ exports.OVERLAY_DIRECTIVES = overlay_directives_1.OVERLAY_DIRECTIVES;
 // Gestures
 var MdGestureConfig_1 = require('./gestures/MdGestureConfig');
 exports.MdGestureConfig = MdGestureConfig_1.MdGestureConfig;
+// Ripple
+var ripple_1 = require('./ripple/ripple');
+exports.MD_RIPPLE_DIRECTIVES = ripple_1.MD_RIPPLE_DIRECTIVES;
+exports.MdRipple = ripple_1.MdRipple;
 // a11y
 var live_announcer_1 = require('./a11y/live-announcer');
 exports.MdLiveAnnouncer = live_announcer_1.MdLiveAnnouncer;

@@ -14,6 +14,7 @@ var core_1 = require('@angular/core');
 var portal_directives_1 = require('../portal/portal-directives');
 var portal_1 = require('../portal/portal');
 var overlay_1 = require('./overlay');
+var overlay_container_1 = require('./overlay-container');
 var overlay_state_1 = require('./overlay-state');
 var overlay_position_builder_1 = require('./position/overlay-position-builder');
 var viewport_ruler_1 = require('./position/viewport-ruler');
@@ -28,9 +29,16 @@ describe('Overlay', function () {
             overlay_1.Overlay,
             overlay_position_builder_1.OverlayPositionBuilder,
             viewport_ruler_1.ViewportRuler,
-            { provide: overlay_1.OVERLAY_CONTAINER_TOKEN, useFactory: function () {
-                    overlayContainerElement = document.createElement('div');
-                    return overlayContainerElement;
+            { provide: overlay_container_1.OverlayContainer, useFactory: function () {
+                    return {
+                        getContainerElement: function () {
+                            if (overlayContainerElement) {
+                                return overlayContainerElement;
+                            }
+                            overlayContainerElement = document.createElement('div');
+                            return overlayContainerElement;
+                        }
+                    };
                 } }
         ]);
     });

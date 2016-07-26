@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var menu_trigger_1 = require('@angular2-material/menu/menu-trigger');
+var menu_1 = require('@angular2-material/menu/menu');
 var icon_1 = require('@angular2-material/icon/icon');
 var button_1 = require('@angular2-material/button/button');
 var toolbar_1 = require('@angular2-material/toolbar/toolbar');
@@ -31,10 +31,10 @@ var MenuDemo = (function () {
             templateUrl: 'menu-demo.html',
             styleUrls: ['menu-demo.css'],
             directives: [
-                menu_trigger_1.MD_MENU_DIRECTIVES,
+                menu_1.MD_MENU_DIRECTIVES,
                 icon_1.MD_ICON_DIRECTIVES,
                 button_1.MD_BUTTON_DIRECTIVES,
-                toolbar_1.MD_TOOLBAR_DIRECTIVES
+                toolbar_1.MD_TOOLBAR_DIRECTIVES,
             ]
         }), 
         __metadata('design:paramtypes', [])

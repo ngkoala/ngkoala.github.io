@@ -4,4 +4,5 @@ export declare class GesturesDemo {
     pressCount: number;
     longpressCount: number;
     swipeCount: number;
+    slideCount: number;
 }

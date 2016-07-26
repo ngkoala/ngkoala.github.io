@@ -9,8 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var menu_1 = require('./menu');
-var menu_item_1 = require('./menu-item');
+var menu_directive_1 = require('./menu-directive');
 var menu_errors_1 = require('./menu-errors');
 var core_2 = require('@angular2-material/core/core');
 /**
@@ -22,7 +21,7 @@ var MdMenuTrigger = (function () {
         this._overlay = _overlay;
         this._element = _element;
         this._viewContainerRef = _viewContainerRef;
-        this.menuOpen = false;
+        this._menuOpen = false;
         this.onMenuOpen = new core_1.EventEmitter();
         this.onMenuClose = new core_1.EventEmitter();
     }
@@ -32,8 +31,13 @@ var MdMenuTrigger = (function () {
         this.menu.close.subscribe(function () { return _this.closeMenu(); });
     };
     MdMenuTrigger.prototype.ngOnDestroy = function () { this.destroyMenu(); };
+    Object.defineProperty(MdMenuTrigger.prototype, "menuOpen", {
+        get: function () { return this._menuOpen; },
+        enumerable: true,
+        configurable: true
+    });
     MdMenuTrigger.prototype.toggleMenu = function () {
-        return this.menuOpen ? this.closeMenu() : this.openMenu();
+        return this._menuOpen ? this.closeMenu() : this.openMenu();
     };
     MdMenuTrigger.prototype.openMenu = function () {
         var _this = this;
@@ -50,20 +54,23 @@ var MdMenuTrigger = (function () {
             .then(function () { return _this._setIsMenuOpen(false); });
     };
     MdMenuTrigger.prototype.destroyMenu = function () {
-        this._overlayRef.dispose();
+        if (this._overlayRef) {
+            this._overlayRef.dispose();
+            this._overlayRef = null;
+        }
     };
     // set state rather than toggle to support triggers sharing a menu
     MdMenuTrigger.prototype._setIsMenuOpen = function (isOpen) {
-        this.menuOpen = isOpen;
+        this._menuOpen = isOpen;
         this.menu._setClickCatcher(isOpen);
-        this.menuOpen ? this.onMenuOpen.emit(null) : this.onMenuClose.emit(null);
+        this._menuOpen ? this.onMenuOpen.emit(null) : this.onMenuClose.emit(null);
     };
     /**
      *  This method checks that a valid instance of MdMenu has been passed into
      *  md-menu-trigger-for.  If not, an exception is thrown.
      */
     MdMenuTrigger.prototype._checkMenu = function () {
-        if (!this.menu || !(this.menu instanceof menu_1.MdMenu)) {
+        if (!this.menu || !(this.menu instanceof menu_directive_1.MdMenu)) {
             throw new menu_errors_1.MdMenuMissingError();
         }
     };
@@ -95,11 +102,13 @@ var MdMenuTrigger = (function () {
      * @returns ConnectedPositionStrategy
      */
     MdMenuTrigger.prototype._getPosition = function () {
-        return this._overlay.position().connectedTo(this._element, { originX: 'start', originY: 'top' }, { overlayX: 'start', overlayY: 'top' });
+        var positionX = this.menu.positionX === 'before' ? 'end' : 'start';
+        var positionY = this.menu.positionY === 'above' ? 'bottom' : 'top';
+        return this._overlay.position().connectedTo(this._element, { originX: positionX, originY: positionY }, { overlayX: positionX, overlayY: positionY });
     };
     __decorate([
         core_1.Input('md-menu-trigger-for'), 
-        __metadata('design:type', menu_1.MdMenu)
+        __metadata('design:type', menu_directive_1.MdMenu)
     ], MdMenuTrigger.prototype, "menu", void 0);
     __decorate([
         core_1.Output(), 
@@ -127,5 +136,4 @@ var MdMenuTrigger = (function () {
     return MdMenuTrigger;
 }());
 exports.MdMenuTrigger = MdMenuTrigger;
-exports.MD_MENU_DIRECTIVES = [menu_1.MdMenu, menu_item_1.MdMenuItem, MdMenuTrigger, menu_item_1.MdMenuAnchor];
 //# sourceMappingURL=menu-trigger.js.map
